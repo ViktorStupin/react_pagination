@@ -1,18 +1,20 @@
 import React from 'react';
-export { default } from './Pagination';
+import './Pagination.css';
 
-interface PaginationProps {
+interface PaginationComponentProps {
   total: number;
   perPage: number;
   currentPage?: number;
   onPageChange: (page: number) => void;
+  onPerPageChange?: (perPage: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination: React.FC<PaginationComponentProps> = ({
   total,
   perPage,
   currentPage = 1,
   onPageChange,
+  onPerPageChange,
 }) => {
   const totalPages = Math.ceil(total / perPage);
   const startItem = (currentPage - 1) * perPage + 1;
@@ -22,6 +24,16 @@ const Pagination: React.FC<PaginationProps> = ({
     if (page !== currentPage && page >= 1 && page <= totalPages) {
       onPageChange(page);
     }
+  };
+
+  const handlePerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newPerPage = parseInt(e.target.value, 10);
+
+    if (onPerPageChange) {
+      onPerPageChange(newPerPage);
+    }
+
+    onPageChange(1);
   };
 
   const renderPageNumbers = () => {
@@ -91,10 +103,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <select
         data-cy="perPageSelector"
         value={perPage}
-        onChange={e => {
-          onPageChange(1); // Reset to first page
-          // Note: perPage change should be handled in parent component
-        }}
+        onChange={handlePerPageChange}
       >
         <option value={3}>3</option>
         <option value={5}>5</option>
@@ -104,3 +113,5 @@ const Pagination: React.FC<PaginationProps> = ({
     </div>
   );
 };
+
+export default Pagination;
