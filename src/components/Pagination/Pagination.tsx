@@ -32,8 +32,6 @@ const Pagination: React.FC<PaginationComponentProps> = ({
     if (onPerPageChange) {
       onPerPageChange(newPerPage);
     }
-
-    onPageChange(1);
   };
 
   const renderPageNumbers = () => {
